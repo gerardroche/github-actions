@@ -1,0 +1,23 @@
+name: PHP Continuous Integration
+
+on: [push, pull_request]
+
+jobs:
+  build:
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-latest, windows-latest, ubuntu-latest]
+        php-version: [7.3, 7.4]
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+    - uses: actions/checkout@v1
+
+    - name: Install dependencies
+      run: composer -vvv install
+
+    - name: Test
+      run: vendor/bin/phpunit -v -c phpunit.xml.dist --coverage-text
